@@ -339,20 +339,24 @@ class CheckoutView(APIView):
             billing_info = BillingInfo.objects.create(**billing_data)
 
             # Create Order
-            order = Order.objects.create(
-                order_number   = generate_order_number(),
-                customer       = request.user if (
-                                     request.user and
-                                     request.user.is_authenticated and
-                                     not hasattr(request.user, 'role')
-                                 ) else None,
-                billing_info   = billing_info,
-                coupon         = coupon,
-                subtotal       = subtotal,
+            order_number = generate_order_number()
+            order = Order(
+                order_number    = order_number,
+                customer        = request.user if (
+                                      request.user and
+                                      request.user.is_authenticated and
+                                      not hasattr(request.user, 'role')
+                                  ) else None,
+                billing_info    = billing_info,
+                coupon          = coupon,
+                subtotal        = subtotal,
                 discount_amount = discount_amount,
-                shipping_cost  = shipping_cost,
-                total          = total,
+                shipping_cost   = shipping_cost,
+                total           = total,
             )
+            # Attach payment method as transient attr — finance signal reads this
+            order._payment_method = data['payment_method']
+            order.save()
 
             # Snapshot order items
             order_items = []
