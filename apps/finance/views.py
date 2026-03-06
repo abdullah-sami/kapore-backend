@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+
+from django.db import models
 from common.permissions import IsAdminUser
 from common.pagination import StandardPagination
 from apps.admin_panel.authentication import AdminJWTAuthentication
@@ -269,6 +271,7 @@ class AdminRefundDetailView(APIView):
             try:
                 from apps.inventory.models import Stock
                 from apps.sales.models import OrderItem
+                
                 items = OrderItem.objects.filter(order=refund.order).select_related('variant')
                 for item in items:
                     Stock.objects.filter(variant=item.variant).update(
