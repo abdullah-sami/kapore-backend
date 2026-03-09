@@ -133,6 +133,7 @@ class AdminCategoryListCreateView(APIView):
         return Response(CategorySerializer(categories, many=True).data)
 
     def post(self, request):
+        print(request.data)
         serializer = CategoryCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         category = serializer.save()

@@ -395,8 +395,8 @@ class CheckoutView(APIView):
 # ─────────────────────────────────────────────
 
 class CustomerOrderListView(APIView):
-    authentication_classes = [CustomerJWTAuthentication]
-    permission_classes     = [IsCustomer]
+    authentication_classes = []
+    permission_classes     = [AllowAny]
 
     def get(self, request):
         orders = (

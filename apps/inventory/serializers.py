@@ -94,11 +94,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model  = Category
-        fields = [
-            'id', 'name', 'slug', 'parent', 'image_url',
+        fields = ['name', 'slug', 'parent', 'image_url',
             'is_active', 'sort_order', 'children',
         ]
-        read_only_fields = ['id', 'slug']
+        read_only_fields = [ 'slug']
 
     def get_children(self, obj):
         # Only recurse one level deep to avoid heavy nesting
